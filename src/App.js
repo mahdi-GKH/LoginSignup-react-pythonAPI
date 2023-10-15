@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import Forms from './components/LoginSignup';
+import Home from './components/home';
+import { Route,Routes } from 'react-router-dom';
+import './style.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const User = ()=>{
+    return localStorage.getItem('token');
 }
 
-export default App;
+
+export default function App(){
+    const isAuth = User();
+
+    if(isAuth) {
+        return(<Home/>)
+    }else{
+        
+        return(<Forms/>)
+    }
+}

@@ -1,0 +1,13 @@
+.FormSection{
+    background-image: linear-gradient(to left top, #424854,#383D4B);
+   overflow: hidden;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+input::placeholder{
+    color: white !important;
+}
+#change_form{
+    cursor: pointer;
+}
