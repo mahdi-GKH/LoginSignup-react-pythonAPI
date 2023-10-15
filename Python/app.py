@@ -10,18 +10,34 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+# Checks if the user has already registered with this email
+def search_email(email):
+    res = True
+    
+    conn = sqlite3.connect('account') 
+    c = conn.cursor()
+    for row in c.execute('SELECT * FROM users  '):
+            
+            if(row[1] == email):
+                res = False
+                break
+    return res
+    
+
 
 def CreateAccount(email,password,name):
+    if(search_email(email)):
+        token = (''.join(random.choices(string.ascii_uppercase, k=5)))
 
-    token = (''.join(random.choices(string.ascii_uppercase, k=5)))
+        conn = sqlite3.connect("account") 
+        c = conn.cursor()
+        conn.execute(f"INSERT INTO users (token,email,password,name)\
+                    VALUES ('{token}', '{email}','{password}','{name}')")
+        conn.commit()
 
-    conn = sqlite3.connect("account") 
-    c = conn.cursor()
-    conn.execute(f"INSERT INTO users (token,email,password,name)\
-                  VALUES ('{token}', '{email}','{password}','{name}')")
-    conn.commit()
-
-    return jsonify({"token": token}), 201
+        return jsonify({"token": token}), 201
+    else:
+        return ("User already exists")
 
 
 def Auth(email,password):
@@ -69,7 +85,6 @@ def SignUp():
 
 @app.route("/username/<token>", methods=["GET"])
 def Username(token):
-    
     return username(token)
 
 
